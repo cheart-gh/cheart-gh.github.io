@@ -1,45 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Your awesome title</title>
-    <description>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
-</description>
+    <title>cheart</title>
+    <description></description>
     <link>http://yourdomain.com/</link>
     <atom:link href="http://yourdomain.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 06 May 2016 20:00:07 +0800</pubDate>
-    <lastBuildDate>Fri, 06 May 2016 20:00:07 +0800</lastBuildDate>
+    <pubDate>Sat, 07 May 2016 11:55:37 +0800</pubDate>
+    <lastBuildDate>Sat, 07 May 2016 11:55:37 +0800</lastBuildDate>
     <generator>Jekyll v3.1.3</generator>
     
       <item>
-        <title>Welcome to Jekyll!</title>
-        <description>&lt;p&gt;You’ll find this post in your &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code class=&quot;highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
-
-&lt;p&gt;To add new posts, simply add a file in the &lt;code class=&quot;highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory that follows the convention &lt;code class=&quot;highlighter-rouge&quot;&gt;YYYY-MM-DD-name-of-post.ext&lt;/code&gt; and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.&lt;/p&gt;
-
-&lt;p&gt;Jekyll also offers powerful support for code snippets:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Hi, &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;Tom&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; prints &#39;Hi, Tom&#39; to STDOUT.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;Check out the &lt;a href=&quot;http://jekyllrb.com/docs/home&quot;&gt;Jekyll docs&lt;/a&gt; for more info on how to get the most out of Jekyll. File all bugs/feature requests at &lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll’s GitHub repo&lt;/a&gt;. If you have questions, you can ask them on &lt;a href=&quot;https://talk.jekyllrb.com/&quot;&gt;Jekyll Talk&lt;/a&gt;.&lt;/p&gt;
-
-</description>
-        <pubDate>Fri, 06 May 2016 09:49:15 +0800</pubDate>
-        <link>http://yourdomain.com/jekyll/update/2016/05/06/welcome-to-jekyll.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/jekyll/update/2016/05/06/welcome-to-jekyll.html</guid>
-        
-        
-        <category>jekyll</category>
-        
-        <category>update</category>
-        
-      </item>
-    
-      <item>
-        <title>Hello world for Disconf</title>
+        <title>Disconf Hello world</title>
         <description>&lt;h2 id=&quot;disconf&quot;&gt;Disconf,啥玩意&lt;/h2&gt;
 &lt;p&gt;Distributed Configuration Management Platform(分布式配置管理平台)&lt;/p&gt;
 
@@ -242,6 +213,39 @@ password : admin&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
     &amp;lt;version&amp;gt;2.6.31&amp;lt;/version&amp;gt;
 &amp;lt;/dependency&amp;gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
+&lt;h3 id=&quot;disconfproperties&quot;&gt;加入并配置disconf.properties&lt;/h3&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-properties&quot; data-lang=&quot;properties&quot;&gt;&lt;span class=&quot;c&quot;&gt;# 是否使用远程配置文件
+# true(默认)会从远程获取配置 false则直接获取本地配置
+&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;disconf.enable.remote.conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;true&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;#
+# 配置服务器的 HOST,用逗号分隔  127.0.0.1:8000,127.0.0.1:8000
+#
+&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;disconf.conf_server_host&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;192.168.88.30:8080&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# 版本, 请采用 X_X_X_X 格式 
+&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;disconf.version&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;1.0.0&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# APP 请采用 产品线_服务名 格式
+&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;disconf.app&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;cwang&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# 环境
+&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;disconf.env&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;rd&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# 忽略哪些分布式配置，用逗号分隔
+&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;disconf.ignore&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# 获取远程配置 重试次数，默认是3次
+&lt;/span&gt;
+&lt;span class=&quot;py&quot;&gt;disconf.conf_server_url_retry_times&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;1&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# 获取远程配置 重试时休眠时间，默认是5秒
+&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;disconf.conf_server_url_retry_sleep_seconds&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;1&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# 用户指定的下载文件夹, 远程文件下载后会放在这里
+&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;disconf.user_define_download_dir&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;./&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
 &lt;h3 id=&quot;application-context&quot;&gt;配置application-context&lt;/h3&gt;
 
 &lt;h4 id=&quot;application-contextxml-&quot;&gt;在application-context.xml 中加入&lt;/h4&gt;
@@ -261,11 +265,13 @@ password : admin&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
           &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;com.baidu.disconf.client.addons.properties.ReloadablePropertiesFactoryBean&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
         &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;locations&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
             &lt;span class=&quot;nt&quot;&gt;&amp;lt;list&amp;gt;&lt;/span&gt;
+                &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 配置需要注入的远程文件 --&amp;gt;&lt;/span&gt;
                 &lt;span class=&quot;nt&quot;&gt;&amp;lt;value&amp;gt;&lt;/span&gt;config-goods.properties&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&lt;/span&gt;
             &lt;span class=&quot;nt&quot;&gt;&amp;lt;/list&amp;gt;&lt;/span&gt;
         &lt;span class=&quot;nt&quot;&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
     &lt;span class=&quot;nt&quot;&gt;&amp;lt;/bean&amp;gt;&lt;/span&gt;
     
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 配置PropertyPlaceholderConfigurer --&amp;gt;&lt;/span&gt;
     &lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;propertyConfigurerForProject1&quot;&lt;/span&gt;
       &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;org.springframework.beans.factory.config.PropertyPlaceholderConfigurer&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
         &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ignoreResourceNotFound&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;true&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
@@ -277,9 +283,61 @@ password : admin&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
         &lt;span class=&quot;nt&quot;&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
     &lt;span class=&quot;nt&quot;&gt;&amp;lt;/bean&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;需要说明的是&lt;code class=&quot;highlighter-rouge&quot;&gt;com.baidu.disconf.client.DisconfMgrBean&lt;/code&gt;是静态的disconf Bean 管理器,也就是每次项目构建或者开始运行的时候扫描注入，而&lt;code class=&quot;highlighter-rouge&quot;&gt;com.baidu.disconf.client.DisconfMgrBeanSecond&lt;/code&gt;是动态的，也就是扫描管理web端配置文件发生的变化&lt;/p&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;import&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;resource=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;classpath*:spring/spring-db.xml&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;import&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;resource=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;classpath*:spring/spring-dubbo.xml&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;import&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;resource=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;classpath*:spring/spring-mq.xml&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;import&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;resource=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;classpath*:spring/spring-redis.xml&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;Check out the &lt;a href=&quot;http://jekyllrb.com/docs/home&quot;&gt;Jekyll docs&lt;/a&gt; for more info on how to get the most out of Jekyll. File all bugs/feature requests at &lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll’s GitHub repo&lt;/a&gt;. If you have questions, you can ask them on &lt;a href=&quot;https://talk.jekyllrb.com/&quot;&gt;Jekyll Talk&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;然后在这些引入的xml配置文件里就可以直接使用&lt;code class=&quot;highlighter-rouge&quot;&gt;${}&lt;/code&gt;占位符引入配置了&lt;/p&gt;
+
+&lt;p&gt;也可以&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;import resource=&quot;classpath*:spring/spring-redis.xml&quot; /&amp;gt;&lt;/code&gt;引用一个文件，前提是引入的文件路径要和前面加入的&lt;code class=&quot;highlighter-rouge&quot;&gt;disconf.properties&lt;/code&gt;中的&lt;code class=&quot;highlighter-rouge&quot;&gt;disconf.user_define_download_dir&lt;/code&gt; 所配置的路径是一致的&lt;/p&gt;
+
+&lt;p&gt;接下来尝试启动项目&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-log&quot; data-lang=&quot;log&quot;&gt;2016-05-07 11:05:47,907 [main-EventThread] INFO  com.baidu.disconf.core.common.zookeeper.inner.ConnectionWatcher - zk SyncConnected
+2016-05-07 11:05:47,907 [main] INFO  com.baidu.disconf.core.common.zookeeper.inner.ConnectionWatcher - zookeeper: 127.0.0.1:2181 , connected.
+2016-05-07 11:05:47,908 [main] INFO  com.baidu.disconf.core.common.zookeeper.ZookeeperMgr - zoo prefix: /disconf
+2016-05-07 11:05:47,917 [main] INFO  com.baidu.disconf.client.DisconfMgr - ******************************* DISCONF END FIRST SCAN *******************************
+2016-05-07 11:05:48,084 [main] WARN  org.springframework.beans.GenericTypeAwarePropertyDescriptor - Invalid JavaBean property &#39;locations&#39; being accessed! Ambiguous write methods found next to actually used [public void com.baidu.disconf.client.addons.properties.ReloadablePropertiesFactoryBean.setLocations(java.util.List)]: [public void org.springframework.core.io.support.PropertiesLoaderSupport.setLocations(org.springframework.core.io.Resource[])]
+2016-05-07 11:05:48,152 [main] INFO  com.baidu.disconf.client.addons.properties.ReloadablePropertiesFactoryBean - Loading properties file from class path resource [config-goods.properties]
+2016-05-07 11:05:48,211 [main] INFO  com.baidu.disconf.client.DisconfMgr - ******************************* DISCONF START SECOND SCAN *******************************
+2016-05-07 11:05:48,215 [main] INFO  com.baidu.disconf.client.DisconfMgr - Conf File Map: 
+disconf-file:   config-goods.properties 
+    DisconfCenterFile [
+    keyMaps={}
+    additionalKeyMaps={mysql.master.validationQuery=select 1, mysql.master.initialSize=5, mysql.master.timeBetweenEvictionRunsMillis=3000, mysql.master.maxActive=50, mq.address=192.168.88.45:9876, mysql.master.testWhileIdle=true, mysql.master.driverClassName=com.mysql.jdbc.Driver, mysql.master.testOnBorrow=true, redis.address1=192.168.88.41:6379, redis.address2=192.168.88.42:6379, dubbo.zookeeper.address=192.168.88.148:2181,192.168.88.149:2181,192.168.88.201:2181, mysql.master.minIdle=10, redis.address3=192.168.88.43:6379, redis.address4=192.168.88.44:6379, redis.address5=192.168.88.46:6379, mysql.master.maxIdle=50, mysql.master.minEvictableIdleTimeMillis=6000, redis.address6=192.168.88.47:6379, mysql.master.url=jdbc:mysql://192.168.88.43:3306/ync?autoReconnect=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=utf-8, mysql.master.password=ync365.com, dubbo.zookeeper.register=true, mysql.master.username=root, mysql.master.testOnReturn=true}
+    cls=null
+    remoteServerUrl=/api/config/file?app=cwang&amp;amp;env=rd&amp;amp;type=0&amp;amp;key=config-goods.properties&amp;amp;version=1.0.0]
+
+2016-05-07 11:05:48,215 [main] INFO  com.baidu.disconf.client.DisconfMgr - Conf Item Map: 
+
+2016-05-07 11:05:48,215 [main] INFO  com.baidu.disconf.client.DisconfMgr - ******************************* DISCONF END *******************************&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;可以看到console里面的这些log就是disconf从服务端获取的配置信息&lt;/p&gt;
+
+&lt;p&gt;client部署成功&lt;/p&gt;
+
+&lt;h3 id=&quot;disconf-client-1&quot;&gt;另外一种配置disconf-client的方式&lt;/h3&gt;
+
+&lt;p&gt;由于&lt;code class=&quot;highlighter-rouge&quot;&gt;disconf.properties&lt;/code&gt;文件中的配置决定了项目使用了哪个环境的哪个版本的配置，所以在本地开发时还比较方便，但是如果打包到线上时，就比较麻烦，因为要每次打包前修改&lt;code class=&quot;highlighter-rouge&quot;&gt;disconf.properties&lt;/code&gt;,所以可以不加入&lt;code class=&quot;highlighter-rouge&quot;&gt;disconf.properties&lt;/code&gt;这个文件,而是在项目部署打包成功后启动项目运行时加入Disconf的环境版本等配置信息，这样Disconf会根据这些java启动时参数拉取指定配置的配置文件&lt;/p&gt;
+
+&lt;h4 id=&quot;disconfproperties-1&quot;&gt;如果没有&lt;code class=&quot;highlighter-rouge&quot;&gt;disconf.properties&lt;/code&gt;,可以这样启动项目&lt;/h4&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;java&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;jar&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Ddisconf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rd&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Ddisconf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;conf_server_host&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;192.168&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;88.30&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8080&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Ddisconf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cwang&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Ddisconf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;version&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1.0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Ddisconf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;user_define_download_dir&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=./&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;classes&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Ddisconf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;enable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;remote&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;conf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ync&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;goods&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1.0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;14&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SNAPSHOT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;jar&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;这样就可以了&lt;/p&gt;
+
+&lt;h4 id=&quot;section-6&quot;&gt;延伸&lt;/h4&gt;
+
+&lt;p&gt;如果项目的rd,qa,local,online四个环境分配配置了四个tomcat容器,那么也可以直接把上面的那些java启动参数放倒tomcat的启动脚本中&lt;/p&gt;
+
+&lt;p&gt;编辑tomcat&lt;code class=&quot;highlighter-rouge&quot;&gt;bin/catalina.sh&lt;/code&gt;文件，配置&lt;code class=&quot;highlighter-rouge&quot;&gt;JAVA_OPTS&lt;/code&gt;&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;JAVA_OPTS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;-Ddisconf.env=rd -Ddisconf.conf_server_host=192.168.88.30:8080 -Ddisconf.app=cwang -Ddisconf.version=1.0.0 -Ddisconf.user_define_download_dir=./classes -Ddisconf.enable.remote.conf=true&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;更多配置项请参考 &lt;a href=&quot;https://github.com/knightliao/disconf/wiki/配置说明&quot;&gt;Disconf启动配置参数项&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;这样特定环境的项目跑在特定环境的tomcat里就可以了. &lt;a href=&quot;https://github.com/knightliao/disconf/wiki/Tutorial9&quot;&gt;可参考&lt;/a&gt;&lt;/p&gt;
 
 </description>
         <pubDate>Fri, 06 May 2016 09:49:15 +0800</pubDate>

@@ -6,12 +6,12 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Hello world for Disconf</title>
+  <title>Disconf Hello world</title>
   <meta name="description" content="Disconf,啥玩意Distributed Configuration Management Platform(分布式配置管理平台)">
 
   <link rel="stylesheet" href="/css/main.css">
   <link rel="canonical" href="http://yourdomain.com/jekyll/update/2016/05/06/disconf-guide.html">
-  <link rel="alternate" type="application/rss+xml" title="Your awesome title" href="http://yourdomain.com/feed.xml">
+  <link rel="alternate" type="application/rss+xml" title="cheart" href="http://yourdomain.com/feed.xml">
 </head>
 
 
@@ -21,7 +21,7 @@
 
   <div class="wrapper">
 
-    <a class="site-title" href="/">Your awesome title</a>
+    <a class="site-title" href="/">cheart</a>
 
     <nav class="site-nav">
       <a href="#" class="menu-icon">
@@ -35,7 +35,7 @@
       <div class="trigger">
         
           
-          <a class="page-link" href="/about/">About</a>
+          <a class="page-link" href="/about/">About Me</a>
           
         
           
@@ -57,7 +57,7 @@
         <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title" itemprop="name headline">Hello world for Disconf</h1>
+    <h1 class="post-title" itemprop="name headline">Disconf Hello world</h1>
     <p class="post-meta"><time datetime="2016-05-06T09:49:15+08:00" itemprop="datePublished">May 6, 2016</time></p>
   </header>
 
@@ -264,6 +264,39 @@ password : admin</code></pre></figure>
     &lt;version&gt;2.6.31&lt;/version&gt;
 &lt;/dependency&gt;</code></pre></figure>
 
+<h3 id="disconfproperties">加入并配置disconf.properties</h3>
+
+<figure class="highlight"><pre><code class="language-properties" data-lang="properties"><span class="c"># 是否使用远程配置文件
+# true(默认)会从远程获取配置 false则直接获取本地配置
+</span><span class="py">disconf.enable.remote.conf</span><span class="p">=</span><span class="s">true</span>
+
+<span class="c">#
+# 配置服务器的 HOST,用逗号分隔  127.0.0.1:8000,127.0.0.1:8000
+#
+</span><span class="py">disconf.conf_server_host</span><span class="p">=</span><span class="s">192.168.88.30:8080</span>
+
+<span class="c"># 版本, 请采用 X_X_X_X 格式 
+</span><span class="py">disconf.version</span><span class="p">=</span><span class="s">1.0.0</span>
+
+<span class="c"># APP 请采用 产品线_服务名 格式
+</span><span class="py">disconf.app</span><span class="p">=</span><span class="s">cwang</span>
+
+<span class="c"># 环境
+</span><span class="py">disconf.env</span><span class="p">=</span><span class="s">rd</span>
+
+<span class="c"># 忽略哪些分布式配置，用逗号分隔
+</span><span class="py">disconf.ignore</span><span class="p">=</span>
+
+<span class="c"># 获取远程配置 重试次数，默认是3次
+</span>
+<span class="py">disconf.conf_server_url_retry_times</span><span class="p">=</span><span class="s">1</span>
+
+<span class="c"># 获取远程配置 重试时休眠时间，默认是5秒
+</span><span class="py">disconf.conf_server_url_retry_sleep_seconds</span><span class="p">=</span><span class="s">1</span>
+
+<span class="c"># 用户指定的下载文件夹, 远程文件下载后会放在这里
+</span><span class="py">disconf.user_define_download_dir</span><span class="p">=</span><span class="s">./</span></code></pre></figure>
+
 <h3 id="application-context">配置application-context</h3>
 
 <h4 id="application-contextxml-">在application-context.xml 中加入</h4>
@@ -283,11 +316,13 @@ password : admin</code></pre></figure>
           <span class="na">class=</span><span class="s">"com.baidu.disconf.client.addons.properties.ReloadablePropertiesFactoryBean"</span><span class="nt">&gt;</span>
         <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"locations"</span><span class="nt">&gt;</span>
             <span class="nt">&lt;list&gt;</span>
+                <span class="c">&lt;!-- 配置需要注入的远程文件 --&gt;</span>
                 <span class="nt">&lt;value&gt;</span>config-goods.properties<span class="nt">&lt;/value&gt;</span>
             <span class="nt">&lt;/list&gt;</span>
         <span class="nt">&lt;/property&gt;</span>
     <span class="nt">&lt;/bean&gt;</span>
     
+    <span class="c">&lt;!-- 配置PropertyPlaceholderConfigurer --&gt;</span>
     <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"propertyConfigurerForProject1"</span>
       <span class="na">class=</span><span class="s">"org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"</span><span class="nt">&gt;</span>
         <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"ignoreResourceNotFound"</span> <span class="na">value=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
@@ -299,9 +334,61 @@ password : admin</code></pre></figure>
         <span class="nt">&lt;/property&gt;</span>
     <span class="nt">&lt;/bean&gt;</span></code></pre></figure>
 
-<p>需要说明的是<code class="highlighter-rouge">com.baidu.disconf.client.DisconfMgrBean</code>是静态的disconf Bean 管理器,也就是每次项目构建或者开始运行的时候扫描注入，而<code class="highlighter-rouge">com.baidu.disconf.client.DisconfMgrBeanSecond</code>是动态的，也就是扫描管理web端配置文件发生的变化</p>
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;import</span> <span class="na">resource=</span><span class="s">"classpath*:spring/spring-db.xml"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;import</span> <span class="na">resource=</span><span class="s">"classpath*:spring/spring-dubbo.xml"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;import</span> <span class="na">resource=</span><span class="s">"classpath*:spring/spring-mq.xml"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;import</span> <span class="na">resource=</span><span class="s">"classpath*:spring/spring-redis.xml"</span> <span class="nt">/&gt;</span></code></pre></figure>
 
-<p>Check out the <a href="http://jekyllrb.com/docs/home">Jekyll docs</a> for more info on how to get the most out of Jekyll. File all bugs/feature requests at <a href="https://github.com/jekyll/jekyll">Jekyll’s GitHub repo</a>. If you have questions, you can ask them on <a href="https://talk.jekyllrb.com/">Jekyll Talk</a>.</p>
+<p>然后在这些引入的xml配置文件里就可以直接使用<code class="highlighter-rouge">${}</code>占位符引入配置了</p>
+
+<p>也可以<code class="highlighter-rouge">&lt;import resource="classpath*:spring/spring-redis.xml" /&gt;</code>引用一个文件，前提是引入的文件路径要和前面加入的<code class="highlighter-rouge">disconf.properties</code>中的<code class="highlighter-rouge">disconf.user_define_download_dir</code> 所配置的路径是一致的</p>
+
+<p>接下来尝试启动项目</p>
+
+<figure class="highlight"><pre><code class="language-log" data-lang="log">2016-05-07 11:05:47,907 [main-EventThread] INFO  com.baidu.disconf.core.common.zookeeper.inner.ConnectionWatcher - zk SyncConnected
+2016-05-07 11:05:47,907 [main] INFO  com.baidu.disconf.core.common.zookeeper.inner.ConnectionWatcher - zookeeper: 127.0.0.1:2181 , connected.
+2016-05-07 11:05:47,908 [main] INFO  com.baidu.disconf.core.common.zookeeper.ZookeeperMgr - zoo prefix: /disconf
+2016-05-07 11:05:47,917 [main] INFO  com.baidu.disconf.client.DisconfMgr - ******************************* DISCONF END FIRST SCAN *******************************
+2016-05-07 11:05:48,084 [main] WARN  org.springframework.beans.GenericTypeAwarePropertyDescriptor - Invalid JavaBean property 'locations' being accessed! Ambiguous write methods found next to actually used [public void com.baidu.disconf.client.addons.properties.ReloadablePropertiesFactoryBean.setLocations(java.util.List)]: [public void org.springframework.core.io.support.PropertiesLoaderSupport.setLocations(org.springframework.core.io.Resource[])]
+2016-05-07 11:05:48,152 [main] INFO  com.baidu.disconf.client.addons.properties.ReloadablePropertiesFactoryBean - Loading properties file from class path resource [config-goods.properties]
+2016-05-07 11:05:48,211 [main] INFO  com.baidu.disconf.client.DisconfMgr - ******************************* DISCONF START SECOND SCAN *******************************
+2016-05-07 11:05:48,215 [main] INFO  com.baidu.disconf.client.DisconfMgr - Conf File Map: 
+disconf-file:   config-goods.properties 
+    DisconfCenterFile [
+    keyMaps={}
+    additionalKeyMaps={mysql.master.validationQuery=select 1, mysql.master.initialSize=5, mysql.master.timeBetweenEvictionRunsMillis=3000, mysql.master.maxActive=50, mq.address=192.168.88.45:9876, mysql.master.testWhileIdle=true, mysql.master.driverClassName=com.mysql.jdbc.Driver, mysql.master.testOnBorrow=true, redis.address1=192.168.88.41:6379, redis.address2=192.168.88.42:6379, dubbo.zookeeper.address=192.168.88.148:2181,192.168.88.149:2181,192.168.88.201:2181, mysql.master.minIdle=10, redis.address3=192.168.88.43:6379, redis.address4=192.168.88.44:6379, redis.address5=192.168.88.46:6379, mysql.master.maxIdle=50, mysql.master.minEvictableIdleTimeMillis=6000, redis.address6=192.168.88.47:6379, mysql.master.url=jdbc:mysql://192.168.88.43:3306/ync?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=utf-8, mysql.master.password=ync365.com, dubbo.zookeeper.register=true, mysql.master.username=root, mysql.master.testOnReturn=true}
+    cls=null
+    remoteServerUrl=/api/config/file?app=cwang&amp;env=rd&amp;type=0&amp;key=config-goods.properties&amp;version=1.0.0]
+
+2016-05-07 11:05:48,215 [main] INFO  com.baidu.disconf.client.DisconfMgr - Conf Item Map: 
+
+2016-05-07 11:05:48,215 [main] INFO  com.baidu.disconf.client.DisconfMgr - ******************************* DISCONF END *******************************</code></pre></figure>
+
+<p>可以看到console里面的这些log就是disconf从服务端获取的配置信息</p>
+
+<p>client部署成功</p>
+
+<h3 id="disconf-client-1">另外一种配置disconf-client的方式</h3>
+
+<p>由于<code class="highlighter-rouge">disconf.properties</code>文件中的配置决定了项目使用了哪个环境的哪个版本的配置，所以在本地开发时还比较方便，但是如果打包到线上时，就比较麻烦，因为要每次打包前修改<code class="highlighter-rouge">disconf.properties</code>,所以可以不加入<code class="highlighter-rouge">disconf.properties</code>这个文件,而是在项目部署打包成功后启动项目运行时加入Disconf的环境版本等配置信息，这样Disconf会根据这些java启动时参数拉取指定配置的配置文件</p>
+
+<h4 id="disconfproperties-1">如果没有<code class="highlighter-rouge">disconf.properties</code>,可以这样启动项目</h4>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">java</span> <span class="o">-</span><span class="n">jar</span> <span class="o">-</span><span class="n">Ddisconf</span><span class="o">.</span><span class="na">env</span><span class="o">=</span><span class="n">rd</span> <span class="o">-</span><span class="n">Ddisconf</span><span class="o">.</span><span class="na">conf_server_host</span><span class="o">=</span><span class="mf">192.168</span><span class="o">.</span><span class="mf">88.30</span><span class="o">:</span><span class="mi">8080</span> <span class="o">-</span><span class="n">Ddisconf</span><span class="o">.</span><span class="na">app</span><span class="o">=</span><span class="n">cwang</span> <span class="o">-</span><span class="n">Ddisconf</span><span class="o">.</span><span class="na">version</span><span class="o">=</span><span class="mf">1.0</span><span class="o">.</span><span class="mi">0</span> <span class="o">-</span><span class="n">Ddisconf</span><span class="o">.</span><span class="na">user_define_download_dir</span><span class="o">=./</span><span class="n">classes</span> <span class="o">-</span><span class="n">Ddisconf</span><span class="o">.</span><span class="na">enable</span><span class="o">.</span><span class="na">remote</span><span class="o">.</span><span class="na">conf</span><span class="o">=</span><span class="kc">true</span> <span class="n">ync</span><span class="o">-</span><span class="n">goods</span><span class="o">-</span><span class="mf">1.0</span><span class="o">.</span><span class="mi">14</span><span class="o">-</span><span class="n">SNAPSHOT</span><span class="o">.</span><span class="na">jar</span></code></pre></figure>
+
+<p>这样就可以了</p>
+
+<h4 id="section-6">延伸</h4>
+
+<p>如果项目的rd,qa,local,online四个环境分配配置了四个tomcat容器,那么也可以直接把上面的那些java启动参数放倒tomcat的启动脚本中</p>
+
+<p>编辑tomcat<code class="highlighter-rouge">bin/catalina.sh</code>文件，配置<code class="highlighter-rouge">JAVA_OPTS</code></p>
+
+<figure class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">JAVA_OPTS</span><span class="o">=</span><span class="s">"-Ddisconf.env=rd -Ddisconf.conf_server_host=192.168.88.30:8080 -Ddisconf.app=cwang -Ddisconf.version=1.0.0 -Ddisconf.user_define_download_dir=./classes -Ddisconf.enable.remote.conf=true"</span></code></pre></figure>
+
+<p>更多配置项请参考 <a href="https://github.com/knightliao/disconf/wiki/配置说明">Disconf启动配置参数项</a></p>
+
+<p>这样特定环境的项目跑在特定环境的tomcat里就可以了. <a href="https://github.com/knightliao/disconf/wiki/Tutorial9">可参考</a></p>
 
 
   </div>
@@ -315,13 +402,13 @@ password : admin</code></pre></figure>
 
   <div class="wrapper">
 
-    <h2 class="footer-heading">Your awesome title</h2>
+    <h2 class="footer-heading">cheart</h2>
 
     <div class="footer-col-wrapper">
       <div class="footer-col footer-col-1">
         <ul class="contact-list">
-          <li>Your awesome title</li>
-          <li><a href="mailto:your-email@domain.com">your-email@domain.com</a></li>
+          <li>cheart</li>
+          <li><a href="mailto:cheartx@outlook.com">cheartx@outlook.com</a></li>
         </ul>
       </div>
 
@@ -346,8 +433,7 @@ password : admin</code></pre></figure>
       </div>
 
       <div class="footer-col footer-col-3">
-        <p>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
-</p>
+        <p></p>
       </div>
     </div>
 

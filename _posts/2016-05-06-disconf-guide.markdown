@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Hello world for Disconf"
+title:  "Disconf Hello world"
 date:   2016-05-06 09:49:15 +0800
 categories: jekyll update
 ---
@@ -198,6 +198,43 @@ password : admin
 
 {% endhighlight %}
 
+### 加入并配置disconf.properties
+
+{% highlight properties %}
+
+# 是否使用远程配置文件
+# true(默认)会从远程获取配置 false则直接获取本地配置
+disconf.enable.remote.conf=true
+
+#
+# 配置服务器的 HOST,用逗号分隔  127.0.0.1:8000,127.0.0.1:8000
+#
+disconf.conf_server_host=192.168.88.30:8080
+
+# 版本, 请采用 X_X_X_X 格式 
+disconf.version=1.0.0
+
+# APP 请采用 产品线_服务名 格式
+disconf.app=cwang
+
+# 环境
+disconf.env=rd
+
+# 忽略哪些分布式配置，用逗号分隔
+disconf.ignore=
+
+# 获取远程配置 重试次数，默认是3次
+
+disconf.conf_server_url_retry_times=1
+
+# 获取远程配置 重试时休眠时间，默认是5秒
+disconf.conf_server_url_retry_sleep_seconds=1
+
+# 用户指定的下载文件夹, 远程文件下载后会放在这里
+disconf.user_define_download_dir=./
+
+{% endhighlight %}
+
 ### 配置application-context
 
 #### 在application-context.xml 中加入
@@ -219,11 +256,13 @@ password : admin
           class="com.baidu.disconf.client.addons.properties.ReloadablePropertiesFactoryBean">
         <property name="locations">
             <list>
+                <!-- 配置需要注入的远程文件 -->
                 <value>config-goods.properties</value>
             </list>
         </property>
     </bean>
     
+    <!-- 配置PropertyPlaceholderConfigurer -->
     <bean id="propertyConfigurerForProject1"
       class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="ignoreResourceNotFound" value="true"/>
@@ -237,12 +276,82 @@ password : admin
 
 {% endhighlight %}
 
-需要说明的是`com.baidu.disconf.client.DisconfMgrBean`是静态的disconf Bean 管理器,也就是每次项目构建或者开始运行的时候扫描注入，而`com.baidu.disconf.client.DisconfMgrBeanSecond`是动态的，也就是扫描管理web端配置文件发生的变化
+
+{% highlight xml %}
+
+<import resource="classpath*:spring/spring-db.xml" />
+<import resource="classpath*:spring/spring-dubbo.xml" />
+<import resource="classpath*:spring/spring-mq.xml" />
+<import resource="classpath*:spring/spring-redis.xml" />
+
+{% endhighlight %}
+
+然后在这些引入的xml配置文件里就可以直接使用`${}`占位符引入配置了
+
+也可以`<import resource="classpath*:spring/spring-redis.xml" />`引用一个文件，前提是引入的文件路径要和前面加入的`disconf.properties`中的`disconf.user_define_download_dir` 所配置的路径是一致的
+
+接下来尝试启动项目
+
+{% highlight log %}
+
+2016-05-07 11:05:47,907 [main-EventThread] INFO  com.baidu.disconf.core.common.zookeeper.inner.ConnectionWatcher - zk SyncConnected
+2016-05-07 11:05:47,907 [main] INFO  com.baidu.disconf.core.common.zookeeper.inner.ConnectionWatcher - zookeeper: 127.0.0.1:2181 , connected.
+2016-05-07 11:05:47,908 [main] INFO  com.baidu.disconf.core.common.zookeeper.ZookeeperMgr - zoo prefix: /disconf
+2016-05-07 11:05:47,917 [main] INFO  com.baidu.disconf.client.DisconfMgr - ******************************* DISCONF END FIRST SCAN *******************************
+2016-05-07 11:05:48,084 [main] WARN  org.springframework.beans.GenericTypeAwarePropertyDescriptor - Invalid JavaBean property 'locations' being accessed! Ambiguous write methods found next to actually used [public void com.baidu.disconf.client.addons.properties.ReloadablePropertiesFactoryBean.setLocations(java.util.List)]: [public void org.springframework.core.io.support.PropertiesLoaderSupport.setLocations(org.springframework.core.io.Resource[])]
+2016-05-07 11:05:48,152 [main] INFO  com.baidu.disconf.client.addons.properties.ReloadablePropertiesFactoryBean - Loading properties file from class path resource [config-goods.properties]
+2016-05-07 11:05:48,211 [main] INFO  com.baidu.disconf.client.DisconfMgr - ******************************* DISCONF START SECOND SCAN *******************************
+2016-05-07 11:05:48,215 [main] INFO  com.baidu.disconf.client.DisconfMgr - Conf File Map: 
+disconf-file:   config-goods.properties 
+    DisconfCenterFile [
+    keyMaps={}
+    additionalKeyMaps={mysql.master.validationQuery=select 1, mysql.master.initialSize=5, mysql.master.timeBetweenEvictionRunsMillis=3000, mysql.master.maxActive=50, mq.address=192.168.88.45:9876, mysql.master.testWhileIdle=true, mysql.master.driverClassName=com.mysql.jdbc.Driver, mysql.master.testOnBorrow=true, redis.address1=192.168.88.41:6379, redis.address2=192.168.88.42:6379, dubbo.zookeeper.address=192.168.88.148:2181,192.168.88.149:2181,192.168.88.201:2181, mysql.master.minIdle=10, redis.address3=192.168.88.43:6379, redis.address4=192.168.88.44:6379, redis.address5=192.168.88.46:6379, mysql.master.maxIdle=50, mysql.master.minEvictableIdleTimeMillis=6000, redis.address6=192.168.88.47:6379, mysql.master.url=jdbc:mysql://192.168.88.43:3306/ync?autoReconnect=true&useUnicode=true&characterEncoding=utf-8, mysql.master.password=ync365.com, dubbo.zookeeper.register=true, mysql.master.username=root, mysql.master.testOnReturn=true}
+    cls=null
+    remoteServerUrl=/api/config/file?app=cwang&env=rd&type=0&key=config-goods.properties&version=1.0.0]
+
+2016-05-07 11:05:48,215 [main] INFO  com.baidu.disconf.client.DisconfMgr - Conf Item Map: 
+
+2016-05-07 11:05:48,215 [main] INFO  com.baidu.disconf.client.DisconfMgr - ******************************* DISCONF END *******************************
 
 
+{% endhighlight %}
+
+可以看到console里面的这些log就是disconf从服务端获取的配置信息
+
+client部署成功
+
+### 另外一种配置disconf-client的方式
+
+由于`disconf.properties`文件中的配置决定了项目使用了哪个环境的哪个版本的配置，所以在本地开发时还比较方便，但是如果打包到线上时，就比较麻烦，因为要每次打包前修改`disconf.properties`,所以可以不加入`disconf.properties`这个文件,而是在项目部署打包成功后启动项目运行时加入Disconf的环境版本等配置信息，这样Disconf会根据这些java启动时参数拉取指定配置的配置文件
+
+#### 如果没有`disconf.properties`,可以这样启动项目
+
+{% highlight java %}
+
+java -jar -Ddisconf.env=rd -Ddisconf.conf_server_host=192.168.88.30:8080 -Ddisconf.app=cwang -Ddisconf.version=1.0.0 -Ddisconf.user_define_download_dir=./classes -Ddisconf.enable.remote.conf=true ync-goods-1.0.14-SNAPSHOT.jar
+
+{% endhighlight %}
+
+这样就可以了
 
 
-Check out the [Jekyll docs][jekyll-docs] for more info on how to get the most out of Jekyll. File all bugs/feature requests at [Jekyll’s GitHub repo][jekyll-gh]. If you have questions, you can ask them on [Jekyll Talk][jekyll-talk].
+#### 延伸
+
+如果项目的rd,qa,local,online四个环境分配配置了四个tomcat容器,那么也可以直接把上面的那些java启动参数放倒tomcat的启动脚本中
+
+编辑tomcat`bin/catalina.sh`文件，配置`JAVA_OPTS`
+
+{% highlight java %}
+
+JAVA_OPTS="-Ddisconf.env=rd -Ddisconf.conf_server_host=192.168.88.30:8080 -Ddisconf.app=cwang -Ddisconf.version=1.0.0 -Ddisconf.user_define_download_dir=./classes -Ddisconf.enable.remote.conf=true"
+
+{% endhighlight %}
+
+更多配置项请参考 [Disconf启动配置参数项](https://github.com/knightliao/disconf/wiki/配置说明)
+
+
+这样特定环境的项目跑在特定环境的tomcat里就可以了. [可参考](https://github.com/knightliao/disconf/wiki/Tutorial9)
+
 
 [jekyll-docs]: http://jekyllrb.com/docs/home
 [jekyll-gh]:   https://github.com/jekyll/jekyll
