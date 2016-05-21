@@ -1,0 +1,341 @@
+---
+layout: post
+title:  "Mysql 速记"
+date:   2016-05-21 14:58:15 +0800
+categories: Mysql
+---
+
+
+# Mysql
+
+## Mysql 安装
+
+### 0x0 安装前卸载
+
+如果安装前系统中存在Mysql，可以参考以下方式卸载现有版本
+
+    $ rpm -qa | grep mysql 
+    $ rpm -e –nodeps xxx
+或者直接s
+
+    $ yum -y remove mysql-libs
+
+### 0x1 下载
+以Mysql-5.6为例子
+	
+    $ wget http://dev.mysql.com/Downloads/MySQL-5.6/MySQL-server-5 .6.21-1.rhel5.x86_64.rpm
+	$ wget http://dev.mysql.com/Downloads/MySQL-5.6/MySQL-devel-5. 6.21-1.rhel5.x86_64.rpm
+	$ wget http://dev.mysql.com/Downloads/MySQL-5.6/MySQL-client-5 .6.21-1.rhel5.x86_64.rpm
+
+### 0x2 安装
+
+	$  yum install -y libaio
+	$  yum install -y numac 
+	$  rpm -ivh MySQL-server-5.6.21-1.rhel5.x86_64.rpm
+	$  rpm -ivh MySQL-client-5.6.21-1.rhel5.x86_64.rpm
+	$  rpm -ivh MySQL-devel-5.6.21-1.rhel5.x86_64.rpm
+
+> libaio是Linux下的一个异步非阻塞接口，它提供了以异步非阻塞方式来读写文件的方式，读写效率比较高。
+
+如果出现 `FATAL ERROR: please install the following Perl modules before executing /usr/bin/mysql_install_db:
+Data::Dumper `,则可以 ：
+
+    $ yum install perl-Module-Install.noarch
+
+### 0x3配置
+
+    $ cp /usr/share/mysql/mysql-default.cnf /etc/my.cnf
+    $ /usr/bin/mysql_install_db 
+### 0x4登陆
+
+    $ service mysql start
+	$ more /root/.mysql_secret
+	$ mysql -uroot -pEHv5phYkEhMUo8sa
+	
+### 0x5设置密码
+
+    mysql> SET PASSWORD = PASSWORD('123456');
+    
+### 0x6 授权
+
+    mysql> grant all privileges on *.* to root@'%' identified by 'qaz123wsx' with grant option;
+	mysql> flush privileges;
+
+### 开机启动
+
+    $ chkconfig mysql on
+    $ chkconfig mysql --list
+## Mysql 用户管理
+
+    mysql> use mysql
+    
+### 查看用户
+
+    mysql> select host,user from user;
+
+### 新建用户
+
+    mysql> CREATE USER username IDENTIFIED BY 'password';
+
+> [新建用户](http://dev.mysql.com/doc/refman/5.7/en/create-user.html)
+
+### 修改用户
+
+    mysql> rename user test to test1;
+>mysql 5 之前需要使用update 更新user表
+>[修改用户](http://dev.mysql.com/doc/refman/5.7/en/rename-user.html)
+
+### 删除用户
+
+    mysql> drop user test1;
+>mysql5之前删除用户时必须先使用 [revoke](http://dev.mysql.com/doc/refman/5.0/en/revoke.html) 删除用户权限，然后删除用户，mysql5之后 [drop](http://dev.mysql.com/doc/refman/5.7/en/drop-user.html) 命令可以删除用户的同时删除用户的相关权限	
+
+### 更改密码
+
+    mysql> set password for test1 = password('123456');
+    mysql> flush privileges;
+>`flush privileges` 用于更新mysql系统权限相关表,新建用户,设置密码,设置用户权限后可以用这个东西刷新,避免出现拒绝访问的错误    
+> [更改密码](http://dev.mysql.com/doc/refman/5.7/en/set-password.html)    
+
+或者
+
+    mysql> update mysql.user set password = password('123456') where user='test1'
+    mysql> flush privileges;
+> 注意！
+> mysql5.7.9后,user表中`password`字段更改成了`authentication_string`, 所以,5.7.9后可以
+
+Mysql 5.7.9后:
+
+    mysql> update mysql.user set authentication_string = password('123456') where user='test1';
+    mysql> flush privileges;
+
+### 查看用户权限
+
+    mysql> show grants for test1;
+>[查看权限](http://dev.mysql.com/doc/refman/5.7/en/show-grants.html)
+
+### 赋予权限
+
+    mysql> grant select on dmc_db.* to test1;
+
+#### 赋予普通数据用户，查询、插入、更新、删除 数据库中所有表数据的权限
+
+    mysql> grant select on testdb.* to common_user@'%'
+
+	mysql> grant insert on testdb.* to common_user@'%'
+
+	mysql> grant update on testdb.* to common_user@'%'
+
+	mysql> grant delete on testdb.* to common_user@'%'
+
+
+或者，用一条 MySQL 命令来替代：
+
+    mysql> grant select, insert, update, delete on testdb.* to common_user@'%'
+
+#### 赋予数据库开发人员，创建表、索引、视图、存储过程、函数 等权限
+
+    mysql> grant create on testdb.* to developer@'192.168.0.%';
+
+	mysql> grant alter on testdb.* to developer@'192.168.0.%';
+
+	mysql> grant drop on testdb.* to developer@'192.168.0.%';
+
+#### 赋予操作 MySQL 外键权限
+
+    mysql> grant references on testdb.* to developer@'192.168.0.%';
+
+#### 赋予操作 MySQL 临时表权限
+
+    mysql> grant create temporary tables on testdb.* to developer@'192.168.0.%';
+
+#### 赋予操作 MySQL 索引权限
+
+    mysql> grant index on testdb.* to developer@'192.168.0.%';
+
+#### 赋予操作 MySQL 视图、查看视图源代码 权限
+
+    mysql> grant create view on testdb.* to developer@'192.168.0.%';
+	mysql> grant show view on testdb.* to developer@'192.168.0.%';
+
+#### 赋予操作 MySQL 存储过程、函数 权限
+
+    mysql> grant create routine on testdb.* to developer@'192.168.0.%';
+	mysql> grant alter routine on testdb.* to developer@'192.168.0.%';
+	mysql> grant execute on testdb.* to developer@'192.168.0.%';
+
+#### 赋予普通 DBA 管理某个 MySQL 数据库的权限
+
+    mysql> grant all privileges on testdb to dba@'localhost';  
+其中，关键字 “privileges” 可以省略。
+
+#### 赋予高级 DBA 管理 MySQL 中所有数据库的权限
+
+    mysql> grant all on *.* to dba@'localhost';
+
+### MySQL赋予权限,分别可以作用在多个层次上
+
+#### 1.作用在整个 MySQL 服务器上：
+ 可以查询 MySQL 中所有数据库中的表
+
+    mysql> grant select on *.* to dba@localhost; 
+
+可以管理 MySQL 中的所有数据库
+
+    mysql> grant all on *.* to dba@localhost;
+
+#### 2. 赋予作用在单个数据库上
+可以查询 testdb 中的表
+
+    mysql> grant select on testdb.* to dba@localhost; 
+
+#### 3. 赋予作用在单个数据表上
+
+    mysql> grant select, insert, update, delete on testdb.orders to dba@localhost;
+
+#### 4. 赋予作用在表中的列上
+
+    mysql> grant select(id, se, rank) on testdb.apache_log to dba@localhost;
+
+#### 5. 赋予作用在存储过程、函数上
+
+	mysql> grant execute on procedure testdb.pr_add to 'dba'@'localhost'
+	mysql> grant execute on function testdb.fn_add to 'dba'@'localhost'
+
+
+注意：修改完权限以后 一定要刷新服务，或者重启服务，刷新服务用：FLUSH PRIVILEGES。
+
+>[赋予权限](http://dev.mysql.com/doc/refman/5.7/en/grant.html)
+
+### 收回权限
+
+    mysql> revoke select on dmc_db.* from test1
+>[收回权限](http://dev.mysql.com/doc/refman/5.0/en/revoke.html)  
+
+
+----------
+
+
+## Xtrabackup
+### 安装Xtrabackup 
+#### 下载 https://www.percona.com/downloads/XtraBackup/ 下载对应版本的bundle.tar 包即可
+#### 解压后安装 
+
+    $ tar xvf Percona-XtraBackup-2.3.4-re80c779-el7-x86_64-bundle.tar
+    $ rpm -ivh percona-xtrabackup-2.3.4-1.el7.x86_64.rpm
+
+安装时会有package依赖问题需要解决
+
+    [root@adsl-172-10-3-172 xtrabackup]# rpm -ivh percona-xtrabackup-2.3.4-1.el7.x86_64.rpm
+	warning: percona-xtrabackup-2.3.4-1.el7.x86_64.rpm: Header V4 DSA/SHA1 Signature, key ID cd2efd2a: NOKEY
+	error: Failed dependencies:
+        libev.so.4()(64bit) is needed by percona-xtrabackup-2.3.4-1.el7.x86_64
+        perl(DBD::mysql) is needed by percona-xtrabackup-2.3.4-1.el7.x86_64
+        rsync is needed by percona-xtrabackup-2.3.4-1.el7.x86_64 
+  对于`reync`和`libev.so.4()(64bit)`,直接安装即可
+  
+
+    $ yum install rsync
+    $ yum install libev
+对于`perl(DBD::mysql)`则安装
+	
+
+    $ yum install perl-DBD-MySQL
+
+此时可能会报错
+
+    Transaction check error:
+	  file /usr/share/mysql/charsets/README from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/charsets/Index.xml from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/charsets/armscii8.xml from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/charsets/ascii.xml from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/charsets/cp1250.xml from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/charsets/cp1251.xml from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/charsets/cp1256.xml from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/charsets/cp1257.xml from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/charsets/cp850.xml from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/charsets/cp852.xml from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/charsets/cp866.xml from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/charsets/dec8.xml from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/charsets/geostd8.xml from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/charsets/greek.xml from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/charsets/hebrew.xml from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/charsets/hp8.xml from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/charsets/keybcs2.xml from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/charsets/koi8r.xml from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/charsets/koi8u.xml from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/charsets/latin1.xml from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/charsets/latin2.xml from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/charsets/latin5.xml from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/charsets/latin7.xml from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/charsets/macce.xml from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/charsets/macroman.xml from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/charsets/swe7.xml from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/czech/errmsg.sys from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/danish/errmsg.sys from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/dutch/errmsg.sys from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/english/errmsg.sys from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/estonian/errmsg.sys from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/french/errmsg.sys from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/german/errmsg.sys from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/greek/errmsg.sys from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/hungarian/errmsg.sys from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/italian/errmsg.sys from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/japanese/errmsg.sys from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/korean/errmsg.sys from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/norwegian-ny/errmsg.sys from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/norwegian/errmsg.sys from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/polish/errmsg.sys from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/portuguese/errmsg.sys from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/romanian/errmsg.sys from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/russian/errmsg.sys from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/serbian/errmsg.sys from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/slovak/errmsg.sys from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/spanish/errmsg.sys from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/swedish/errmsg.sys from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	  file /usr/share/mysql/ukrainian/errmsg.sys from install of mariadb-libs-1:5.5.47-1.el7_2.x86_64 conflicts with file from package MySQL-server-5.6.29-1.el6.x86_64
+	
+	Error Summary
+	------------- 
+    
+ 原因是安装`perl-DBD-MySQL` 时所依赖的`mariadb-libs`包会和系统中现有的mysql库版本冲突，解决办法是先安装`Mysql-shared`后再安装`perl-DBD-MySQL`即可
+
+    $ rpm -ivh MySQL-shared-5.6.29-1.el6.x86_64.rpm
+    $ yum install perl-DBD-MySQL
+
+> `Mysql-shared`在Mysql官方包中
+
+ ok!
+
+## Mysql 实用技巧
+
+### kill掉当前的慢查询
+
+    mysql>SHOW PROCESSLIST 
+	$ netstat -ntp | grep 54921
+	$ KILL 7254
+
+  `SHOW PROCESSLIST` 查看当前mysql的查询进程, `54921`是查询所在ip后面的端口，然后`netstat` 查询对应这个端口所在的进程,直接kill即可
+
+### 忘记root密码？
+
+#### 首先编辑`my.cnf`，让mysql忽略授权登陆
+
+    $ vi /etc/my.cnf
+#### 在`[mysqld]`中加入`skip grant tables`
+
+    [mysqld]
+    skip-grant-tables  
+
+#### 然后重启mysql
+
+    $ service mysql restart
+
+#### 直接`mysql`,进入后修改密码
+
+    $ mysql
+    mysql> use mysql;
+    mysql> UPDATE user SET Password = password ('new-password') WHERE User = 'root'; 
+    mysql> flush privileges;
+再次重启mysql服务即可.
+
